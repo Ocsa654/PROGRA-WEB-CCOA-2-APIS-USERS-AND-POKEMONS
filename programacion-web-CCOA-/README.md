@@ -1,4 +1,4 @@
-# LOGIN AND API OACC 
+# LOGIN AND API OACC POKEMONS AND USERS
 
 Este proyecto es una demostración básica de cómo implementar un sistema de inicio de sesión en Angular que interactúa con una API para validar usuarios. Una vez autenticado, el usuario puede acceder a un Dashboard donde se muestra una lista paginada de usuarios obtenida desde la API. Además, el Dashboard incluye otras funcionalidades como Privacidad, Preferencias de anuncios, etc.
 
