@@ -52,7 +52,9 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/PROGRA-WEB-CCOA-2-APIS-USERS-AND-POKEMONS/"
+
             },
             "development": {
               "optimization": false,
