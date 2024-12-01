@@ -97,28 +97,32 @@ button:hover {
 }
 
 
-/* dashboard.component.css */
-/* ... (mantener los estilos anteriores) ... */
 
 .top-bar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between; /* Espacio entre "Dashboard" y el perfil */
   align-items: center;
   padding: 0.5rem 2rem;
-  background-color: white;
+  background-color: #6a11cb; /* Fondo púrpura */
+  color: white; /* Texto blanco */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .user-profile {
-  position: relative;
+  margin-left: auto; /* Mueve el perfil completamente a la derecha */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
 }
+
 
 .user-info {
   display: flex;
   align-items: center;
   gap: 12px;
   cursor: pointer;
-  padding: 6px;
+  padding: 15px;
   border-radius: 24px;
   transition: background-color 0.2s;
 }
@@ -205,10 +209,7 @@ button:hover {
   gap: 8px;
 }
 
-.dropdown-item:hover {
-  background-color: #f8f9fa;
-  color: #6a11cb;
-}
+
 top-bar {
   display: flex;
   justify-content: flex-end;
@@ -310,7 +311,7 @@ top-bar {
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
-  align-items: center;
+  align-items: right;
   gap: 8px;
 }
 
@@ -351,3 +352,42 @@ top-bar {
   border-radius: 50%;
   object-fit: cover; /* Asegura que la imagen se recorte bien dentro del círculo */
 }
+
+
+.top-bar .title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 24px;
+  transition: background-color 0.2s;
+}
+
+.user-info:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Fondo más claro al hacer hover */
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid white;
+  transition: transform 0.2s;
+}
+

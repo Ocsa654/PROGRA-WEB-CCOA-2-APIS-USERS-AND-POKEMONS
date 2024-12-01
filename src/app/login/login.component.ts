@@ -13,7 +13,7 @@ import { User } from '../models/user.model';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '';
+  email: string = '';
   password: string = '';
   error: string = '';
 
@@ -23,7 +23,7 @@ export class LoginComponent {
     this.userService.getUsers().subscribe(
       (users: User[]) => {
         const user = users.find(
-          u => u.name === this.username && u.password === this.password
+          u => u.email === this.email && u.password === this.password
         );
   
         if (user) {

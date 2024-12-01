@@ -78,24 +78,40 @@ import { Pokemon } from '../models/pokemon.model';
             <div class="pagination">
               <span class="pagination-info">Showing {{ startIndex + 1 }} to {{ endIndex }} of {{ totalPokemons }} entries</span>
               <div class="pagination-buttons">
-                <button 
-                  (click)="previousPage()" 
-                  [disabled]="currentPage === 1" 
-                  class="pagination-btn"
-                  [class.disabled]="currentPage === 1"
-                >
-                  Previous
-                </button>
-                <span class="page-number">Page {{ currentPage }}</span>
-                <button 
-                  (click)="nextPage()" 
-                  [disabled]="currentPage * pageSize >= totalPokemons" 
-                  class="pagination-btn"
-                  [class.disabled]="currentPage * pageSize >= totalPokemons"
-                >
-                  Next
-                </button>
-              </div>
+  <button 
+    (click)="goToFirstPage()" 
+    [disabled]="currentPage === 1" 
+    class="pagination-btn first-page-btn"
+    [class.disabled]="currentPage === 1"
+  >
+    First
+  </button>
+  <button 
+    (click)="previousPage()" 
+    [disabled]="currentPage === 1" 
+    class="pagination-btn"
+    [class.disabled]="currentPage === 1"
+  >
+    Previous
+  </button>
+  <span class="page-number">Page {{ currentPage }}</span>
+  <button 
+    (click)="nextPage()" 
+    [disabled]="currentPage * pageSize >= totalPokemons" 
+    class="pagination-btn"
+    [class.disabled]="currentPage * pageSize >= totalPokemons"
+  >
+    Next
+  </button>
+  <button 
+    (click)="goToLastPage()" 
+    [disabled]="currentPage * pageSize >= totalPokemons" 
+    class="pagination-btn last-page-btn"
+    [class.disabled]="currentPage * pageSize >= totalPokemons"
+  >
+    Last
+  </button>
+</div>
             </div>
           </ng-template>
         </div>
@@ -611,31 +627,88 @@ export class UserComponent implements OnInit {
  
    constructor(private userService: UserService) {}
  
-   // Métodos originales
+  
    ngOnInit() {
-     this.loadPokemonList();
-   }
+    this.loadPokemonList();
+  }
+
+  loadPokemonList() {
+    this.loading = true;
+    if (this.searchTerm.trim()) {
+      this.searchPokemons();
+    } else {
+      this.fetchDefaultPokemonList();
+    }
+  }
+
+  fetchDefaultPokemonList() {
+    const offset = (this.currentPage - 1) * this.pageSize;
+    this.userService.getPokemonList(this.pageSize, offset).subscribe({
+      next: (response) => {
+        this.pokemons = response.pokemons;
+        this.totalPokemons = response.total;
+        this.displayedPokemons = this.pokemons;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching Pokémon list:', error);
+        this.loading = false;
+      },
+    });
+  }
+
+  searchPokemons() {
+    this.loading = true;
+    const offset = (this.currentPage - 1) * this.pageSize;
+    this.userService.searchPokemon(this.searchTerm, this.pageSize, offset).subscribe({
+      next: (response) => {
+        this.pokemons = response.pokemons;
+        this.totalPokemons = response.total;
+        this.displayedPokemons = this.pokemons;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error searching Pokémon:', error);
+        this.loading = false;
+      },
+    });
+  }
+
+  onSearch() {
+    this.currentPage = 1; // Resetear a la primera página al buscar
+    this.loadPokemonList();
+  }
+
+  // Métodos de navegación y paginación
+  nextPage() {
+    if (this.currentPage * this.pageSize < this.totalPokemons) {
+      this.currentPage++;
+      this.loadPokemonList();
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadPokemonList();
+    }
+  }
+
+  goToFirstPage() {
+    if (this.currentPage !== 1) {
+      this.currentPage = 1;
+      this.loadPokemonList();
+    }
+  }
+
+  goToLastPage() {
+    const lastPage = Math.ceil(this.totalPokemons / this.pageSize);
+    if (this.currentPage !== lastPage) {
+      this.currentPage = lastPage;
+      this.loadPokemonList();
+    }
+  }
  
-   loadPokemonList() {
-     this.loading = true;
-     const offset = (this.currentPage - 1) * this.pageSize;
-     this.userService.getPokemonList(this.pageSize, offset).subscribe({
-       next: (response) => {
-         this.pokemons = response.pokemons;
-         this.totalPokemons = response.total;
-         this.filterPokemons();
-         this.loading = false;
-       },
-       error: (error) => {
-         console.error('Error fetching Pokémon list:', error);
-         this.loading = false;
-       },
-     });
-   }
- 
-   onSearch() {
-     this.filterPokemons();
-   }
  
    filterPokemons() {
      if (!this.searchTerm.trim()) {
@@ -664,19 +737,6 @@ export class UserComponent implements OnInit {
      this.displayedPokemons = sortedPokemons;
    }
  
-   nextPage() {
-     if (this.currentPage * this.pageSize < this.totalPokemons) {
-       this.currentPage++;
-       this.loadPokemonList();
-     }
-   }
- 
-   previousPage() {
-     if (this.currentPage > 1) {
-       this.currentPage--;
-       this.loadPokemonList();
-     }
-   }
  
    sort(field: keyof Pokemon) {
      if (this.sortField === field) {
@@ -709,21 +769,6 @@ export class UserComponent implements OnInit {
  
  
  
-   // Nuevos métodos para la paginación
-   goToFirstPage() {
-     if (this.currentPage !== 1) {
-       this.currentPage = 1;
-       this.loadPokemonList();
-     }
-   }
- 
-   goToLastPage() {
-     const lastPage = Math.ceil(this.totalPokemons / this.pageSize);
-     if (this.currentPage !== lastPage) {
-       this.currentPage = lastPage;
-       this.loadPokemonList();
-     }
-   }
  
    // Nuevos métodos para el modal de eliminación
    deletePokemon(pokemon: Pokemon) {

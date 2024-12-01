@@ -1,13 +1,20 @@
 <!-- dashboard.component.html -->
 <div class="dashboard-container" (click)="closeDropdown($event)">
   <header class="top-bar">
-    <div class="user-profile" *ngIf="currentUser">
+    <span class="title">Dashboard</span> <!-- TÃ­tulo a la izquierda -->
+
+    <div class="user-profile" *ngIf="currentUser"> <!-- Perfil a la derecha -->
       <div class="user-info" (click)="toggleDropdown()">
         <span class="user-name">{{ currentUser.name }}</span>
         <div class="profile-image">
           <img [src]="currentUser.avatar" [alt]="currentUser.name">
         </div>
       </div>
+      <header class="top-bar">
+        <div class="user-profile" *ngIf="currentUser">
+          <!-- Resto del cÃ³digo del perfil de usuario -->
+        </div>
+      </header>
       <div class="dropdown-menu" *ngIf="showDropdown">
         <div class="dropdown-header">
           <img [src]="currentUser.avatar" [alt]="currentUser.name">
@@ -18,7 +25,7 @@
         </div>
         <div class="dropdown-divider"></div>
         <div class="dropdown-item" [routerLink]="'/dashboard/profile'">Ver Perfil</div>
-        <div class="dropdown-item" (click)="logout()">Cerrar Sesión</div>
+        <div class="dropdown-item" (click)="logout()">Cerrar SesiÃ³n</div>
       </div>
     </div>
   </header>
